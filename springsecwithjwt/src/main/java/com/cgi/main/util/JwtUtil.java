@@ -48,7 +48,9 @@ public class JwtUtil {
 	
 	//6. Validate the Username in token and  database, with expDate
 	public boolean validateToken(String token,String username) {
+		System.out.println("token:"+token+"<Line 50");
 		 String tokenUserName=getUserName(token);
+		 System.out.println("Token Name:"+tokenUserName);
 		 return (username.equals(tokenUserName) &&  !isTokenExp(token));
 	}
 }

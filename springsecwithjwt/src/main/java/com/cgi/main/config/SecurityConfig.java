@@ -12,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 //import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.cgi.main.aspect.InvalidUserAuthEntryPoint;
 
@@ -25,7 +26,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private BCryptPasswordEncoder encoder;
 	@Autowired
 	private InvalidUserAuthEntryPoint authenticationEntryPoint;
-	
+	@Autowired
+	private SecurityFilter securityFilter;
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -46,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				http
 				.csrf().disable()
 				.authorizeRequests()
-				.antMatchers("/user/save","/user/login").permitAll()
+				.antMatchers("/user/save","/user/login","/user/msg").permitAll()
 				.anyRequest()
 				.authenticated()
 				.and()
@@ -55,6 +57,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				//filter configuration
+				.and()
+				.addFilterBefore(securityFilter,UsernamePasswordAuthenticationFilter.class);
 				;
 	}
 	

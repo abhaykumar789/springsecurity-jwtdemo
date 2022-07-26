@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,5 +54,16 @@ public class UserController {
 		String message ="SUCCESSFULLY-GENERATE-TOKEN";
 		return ResponseEntity.ok(new UserResponse(token,message));
 		}
+	}
+	
+	@PostMapping("/msg")
+	public ResponseEntity<String> message(@RequestBody UserRequest request) {
+		Optional<User>  op=this.userService.findByUsername(request.getUsername());
+		if(op.isEmpty()) {
+			throw  new UserNotFoundException("USER_NOT_EXITS");
+		}else {
+		 	return ResponseEntity.ok("Hello World");
+		}
+		
 	}
 }
